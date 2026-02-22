@@ -1264,3 +1264,52 @@ createToggle("Legacy Backpack", function(getState)
 end)
 
 
+
+-- =========================
+-- Botón Homer ritual
+-- =========================
+local function startRitual()
+    local Character = player.Character or player.CharacterAdded:Wait()
+    local Humanoid = Character:FindFirstChildOfClass("Humanoid")
+    local HRP = Character:FindFirstChild("HumanoidRootPart")
+    if not Humanoid or not HRP then return end
+
+    -- Crear el Part del ritual
+    local Part = Instance.new("Part")
+    Part.Size = Vector3.new(8, 1, 8)
+    Part.CFrame = HRP.CFrame * CFrame.new(0, -3.5, 0)
+    Part.Anchored = true
+    Part.BrickColor = BrickColor.new("Bright red")
+    Part.Material = Enum.Material.Neon
+    Part.Parent = workspace
+
+    -- Velocidad fija de giro
+    local spinSpeed = 10
+
+    -- Rotación constante del personaje
+    local RotateConnection = RunService.RenderStepped:Connect(function()
+        if Character and HRP then
+            HRP.CFrame = HRP.CFrame * CFrame.Angles(0, math.rad(spinSpeed), 0)
+        end
+    end)
+
+    -- Tween para subir el Part (efecto visual)
+    local Tween = TweenService:Create(Part, TweenInfo.new(10, Enum.EasingStyle.Linear), {
+        Position = Part.Position + Vector3.new(0, 16, 0),
+    })
+    Tween:Play()
+
+    -- Esperar y finalizar ritual
+    task.wait(10)
+    RotateConnection:Disconnect()
+    if Humanoid.Health > 0 then
+        Humanoid:TakeDamage(Humanoid.Health) -- mata al jugador
+    end
+    Part:Destroy()
+end
+
+-- Botón en la UI
+createButton("Homer ritual", function()
+    startRitual()
+end)
+
