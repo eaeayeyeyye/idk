@@ -561,22 +561,17 @@ local corner = Instance.new("UICorner")
 corner.CornerRadius = UDim.new(1, 0)
 corner.Parent = minimizeButton
 
--- Botón flotante "+" circular
-local floatButton = Instance.new("TextButton")
-floatButton.Size = UDim2.new(0, 40, 0, 40)
-floatButton.Position = UDim2.new(0, 10, 0.5, -20)
+-- Botón flotante cuadrado con decal
+local floatButton = Instance.new("ImageButton")
+floatButton.Size = UDim2.new(0, 60, 0, 60) -- más grande
+floatButton.Position = UDim2.new(0, 10, 0.5, -30)
 floatButton.BackgroundColor3 = Color3.fromRGB(0, 200, 0)
-floatButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-floatButton.Font = Enum.Font.SourceSansBold
-floatButton.TextSize = 24
-floatButton.Text = "+"
 floatButton.Visible = false
 floatButton.ZIndex = 10
 floatButton.Parent = screenGui
 
-local floatCorner = Instance.new("UICorner")
-floatCorner.CornerRadius = UDim.new(1, 0)
-floatCorner.Parent = floatButton
+-- Imagen del decal
+floatButton.Image = "rbxassetid://126921135407649"
 
 -- Funcionalidad
 minimizeButton.MouseButton1Click:Connect(function()
