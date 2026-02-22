@@ -1313,3 +1313,72 @@ createButton("Homer ritual", function()
     startRitual()
 end)
 
+
+
+
+
+-- =========================
+-- Botón TP forward (con tween y hover, sin tecla F)
+-- =========================
+local function tpForward(buttonRef)
+    local character = player.Character
+    if not character then return end
+    
+    local hrp = character:FindFirstChild("HumanoidRootPart")
+    if not hrp then return end
+    
+    local lookDirection = hrp.CFrame.LookVector
+    local dashDistance = 20
+    local currentPosition = hrp.Position
+    local newPosition = currentPosition + (lookDirection * dashDistance)
+    
+    -- Desactivar colisiones temporales
+    local bodyParts = {}
+    for _, part in pairs(character:GetChildren()) do
+        if part:IsA("BasePart") and part.Name ~= "HumanoidRootPart" then
+            bodyParts[part] = part.CanCollide
+            part.CanCollide = false
+        end
+    end
+    
+    -- Teleportar hacia adelante
+    hrp.CFrame = CFrame.new(newPosition, newPosition + lookDirection)
+    
+    -- Restaurar colisiones
+    task.wait(0.1)
+    for part, originalCanCollide in pairs(bodyParts) do
+        if part and part.Parent then
+            part.CanCollide = originalCanCollide
+        end
+    end
+
+    -- Efecto visual en el botón
+    if buttonRef then
+        local originalSize = buttonRef.Size
+        local scaleInfo = TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+        local scaleTween = TweenService:Create(buttonRef, scaleInfo, {Size = UDim2.new(0, 90, 0, 35)})
+        scaleTween:Play()
+        
+        scaleTween.Completed:Connect(function()
+            local returnTween = TweenService:Create(buttonRef, scaleInfo, {Size = originalSize})
+            returnTween:Play()
+        end)
+    end
+end
+
+-- Botón en la UI
+local tpButton = createButton("TP forward", function()
+    tpForward(tpButton)
+end)
+
+-- Hover efecto
+tpButton.MouseEnter:Connect(function()
+    local hoverTween = TweenService:Create(tpButton, TweenInfo.new(0.2), {BackgroundColor3 = Color3.new(0.3, 0.6, 1)})
+    hoverTween:Play()
+end)
+
+tpButton.MouseLeave:Connect(function()
+    local leaveTween = TweenService:Create(tpButton, TweenInfo.new(0.2), {BackgroundColor3 = Color3.new(0.2, 0.5, 1)})
+    leaveTween:Play()
+end)
+
