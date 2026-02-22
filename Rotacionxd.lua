@@ -1,5 +1,4 @@
-  loadstring(game:HttpGet("https://rawscripts.net/raw/You-VS-Homer-Anticheat-bypass-by-zins-114291"))()
-
+  
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
 local Players = game:GetService("Players")
